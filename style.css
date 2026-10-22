@@ -1,0 +1,135 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: #0a0a10; /* 夜空背景 */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* 星空背景 */
+#stars {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-image: radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 40px),
+                      radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 30px),
+                      radial-gradient(white, rgba(255,255,255,.1) 2px, transparent 40px);
+    background-size: 550px 550px, 350px 350px, 250px 250px;
+    background-position: 0 0, 40px 60px, 130px 270px;
+    z-index: 0;
+}
+
+/* 标题 */
+.title-container {
+    position: absolute;
+    top: 20px;
+    width: 100%;
+    text-align: center;
+    z-index: 10;
+    color: #fff;
+    letter-spacing: 5px;
+    font-size: 12px;
+    opacity: 0.8;
+}
+
+/* 建筑群容器 */
+#buildings-container {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 60vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 5px;
+    z-index: 1;
+}
+
+/* 单栋建筑 */
+.building {
+    background: linear-gradient(to bottom, #2b1b4d, #1a1a3a);
+    border-radius: 5px 5px 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    padding: 20px 10px;
+    gap: 10px;
+    justify-content: center;
+    align-content: flex-start;
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+    position: relative;
+}
+
+/* 窗户样式 */
+.window {
+    width: 20px;
+    height: 30px;
+    background-color: #0f0f1a;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 1px solid #222;
+}
+
+/* 窗户点亮状态 */
+.window.on {
+    /* 颜色由 JS 动态注入 */
+    box-shadow: 0 0 15px currentColor, inset 0 0 10px currentColor;
+    border-color: transparent;
+}
+
+/* 闪烁动画类 */
+.blinking {
+    animation: blink 0.5s infinite alternate;
+}
+
+@keyframes blink {
+    from { opacity: 0.3; }
+    to { opacity: 1; }
+}
+
+/* 摄像头小窗 (画中画风格) */
+#video-container {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 200px;
+    height: 150px;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 2px solid rgba(255,255,255,0.2);
+    z-index: 10;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    background-color: #000;
+}
+
+.input_video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scaleX(-1); /* 镜像翻转 */
+}
+
+/* UI 提示 */
+#gesture-hint {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    color: rgba(255,255,255,0.6);
+    font-size: 14px;
+    line-height: 1.6;
+    z-index: 10;
+    background: rgba(0,0,0,0.5);
+    padding: 15px;
+    border-radius: 8px;
+    pointer-events: none;
+}
+
+#gesture-hint p { margin: 5px 0; }
+.highlight { color: #fff; font-weight: bold; }
+
+/* 隐藏辅助Canvas */
+.output_canvas {
+    display: none;
+}
