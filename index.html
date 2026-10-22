@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lumos Maxima - 万家灯火 (星光版)</title>
+    <title>Lumos Maxima - 万家灯火 (光标追踪版)</title>
     
     <!-- 引入外部 CSS 文件 -->
     <link rel="stylesheet" href="style.css">
@@ -17,12 +17,19 @@
 <body>
 
     <div id="stars"></div>
-    <!-- 用于放置动态闪烁星星的容器 -->
     <div id="twinkling-stars"></div>
 
     <div class="title-container">
         LUMOS MAXIMA
         <span>TO WINDOWS AWAKE</span>
+    </div>
+
+    <!-- 跟随手部的发光箭头光标 -->
+    <div id="hand-cursor">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <!-- 一个标准鼠标指针形状，尖端在左上角 (0,0) -->
+            <path d="M4 2L20 11.5L12.5 13.5L16.5 21L13.5 22.5L9.5 15L4 20.5V2Z" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"/>
+        </svg>
     </div>
 
     <!-- 建筑群 -->
@@ -42,7 +49,7 @@
     </div>
     <canvas class="output_canvas"></canvas>
 
-    <!-- 操作提示 -->
+    <!-- 提示 -->
     <div id="gesture-hint">
         👌 <b>捏合食指与拇指</b>：点亮/熄灭窗口<br>
         🖐️ <b>单手张开</b>：点亮交错闪烁<br>

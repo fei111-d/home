@@ -1,27 +1,17 @@
 // ================= 0. 动态生成闪烁星光 =================
 function createTwinklingStars() {
     const container = document.getElementById('twinkling-stars');
-    const starCount = 60; // 星星数量
-
-    for (let i = 0; i < starCount; i++) {
+    for (let i = 0; i < 60; i++) {
         const star = document.createElement('div');
         star.className = 'star';
-        
-        // 随机大小 (1px 到 3px)
         const size = Math.random() * 2 + 1;
         star.style.width = `${size}px`;
         star.style.height = `${size}px`;
-        
-        // 随机位置
         star.style.left = `${Math.random() * 100}%`;
-        star.style.top = `${Math.random() * 80}%`; // 限制在屏幕上方 80% 区域，避免和房子底部重叠太多
-        
-        // 随机动画时长和延迟，错开闪烁频率
-        const animDuration = Math.random() * 2 + 1.5; // 1.5s 到 3.5s
-        const animDelay = Math.random() * 2; 
+        star.style.top = `${Math.random() * 80}%`;
+        const animDuration = Math.random() * 2 + 1.5;
         star.style.animationDuration = `${animDuration}s`;
-        star.style.animationDelay = `${animDelay}s`;
-
+        star.style.animationDelay = `${Math.random() * 2}s`;
         container.appendChild(star);
     }
 }
@@ -37,17 +27,14 @@ document.querySelectorAll('.windows-wrapper').forEach(wrapper => {
         const win = document.createElement('div');
         win.className = 'window';
         win.dataset.state = 'off';
-        // 鼠标点击测试
         win.addEventListener('click', () => toggleWindow(win));
         wrapper.appendChild(win);
     }
 });
 
 // ================= 2. 交互核心逻辑 =================
-const neonColors = [
-    '#ffd166', '#ff6b6b', '#4dabf7', 
-    '#69db7c', '#ff922b', '#cc5de8'
-];
+const neonColors = ['#ffd166', '#ff6b6b', '#4dabf7', '#69db7c', '#ff922b', '#cc5de8'];
+const cursorElement = document.getElementById('hand-cursor');
 
 function toggleWindow(win) {
     if (win.dataset.state === 'off') {
@@ -74,12 +61,27 @@ let isFistClosed = false;
 let isBlinking = false;
 
 function onResults(results) {
+    // 如果没检测到手，隐藏光标
     if (!results.multiHandLandmarks || results.multiHandLandmarks.length === 0) {
         isPinching = false;
+        cursorElement.style.opacity = '0';
         return;
     }
 
     const hands = results.multiHandLandmarks;
+    const landmarks = hands[0]; // 默认追踪第一只手
+    const indexTip = landmarks[8]; 
+    const thumbTip = landmarks[4]; 
+
+    // 【更新光标位置】
+    // 镜像处理（因为是前置摄像头），并映射到屏幕像素
+    const screenX = (1 - indexTip.x) * window.innerWidth;
+    const screenY = indexTip.y * window.innerHeight;
+    
+    // 显示并移动光标
+    cursorElement.style.opacity = '1';
+    cursorElement.style.left = `${screenX}px`;
+    cursorElement.style.top = `${screenY}px`;
 
     // 双手握拳：全灭
     if (hands.length === 2) {
@@ -93,11 +95,6 @@ function onResults(results) {
         }
         return; 
     }
-
-    // 单手操作
-    const landmarks = hands[0];
-    const indexTip = landmarks[8]; 
-    const thumbTip = landmarks[4]; 
 
     // 张开手掌：闪烁
     if (checkOpenPalm(landmarks)) {
@@ -116,12 +113,13 @@ function onResults(results) {
     const pinchThreshold = 0.045; 
 
     if (distance < pinchThreshold) {
+        // 视觉反馈：箭头缩小变色
+        cursorElement.classList.add('pinching');
+
         if (!isPinching) {
             isPinching = true;
             
-            const screenX = (1 - indexTip.x) * window.innerWidth;
-            const screenY = indexTip.y * window.innerHeight;
-            
+            // 点击检测（使用光标位置判断）
             const element = document.elementFromPoint(screenX, screenY);
             
             if (element && element.classList.contains('window')) {
@@ -130,6 +128,8 @@ function onResults(results) {
         }
     } else {
         isPinching = false;
+        // 视觉反馈：箭头恢复原状
+        cursorElement.classList.remove('pinching');
     }
 }
 

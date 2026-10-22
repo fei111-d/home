@@ -3,43 +3,31 @@ body, html {
     overflow: hidden;
     background-color: #0d0e15; 
     font-family: 'Helvetica Neue', Arial, sans-serif;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    cursor: none; /* 隐藏系统默认鼠标，使用自定义箭头 */
 }
 
 /* 静态星空底图 */
 #stars {
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
     background-image: 
         radial-gradient(1.5px 1.5px at 15% 25%, rgba(255,255,255,0.9), transparent),
         radial-gradient(2px 2px at 40% 60%, rgba(255,255,255,0.7), transparent),
         radial-gradient(1px 1px at 65% 15%, rgba(255,255,255,0.6), transparent),
-        radial-gradient(1.5px 1.5px at 85% 70%, rgba(255,255,255,0.8), transparent),
-        radial-gradient(1px 1px at 30% 80%, rgba(255,255,255,0.5), transparent);
-    background-size: 400px 400px;
-    z-index: 0;
+        radial-gradient(1.5px 1.5px at 85% 70%, rgba(255,255,255,0.8), transparent);
+    background-size: 400px 400px; z-index: 0;
 }
 
-/* ================= 动态闪烁星空层 ================= */
+/* 动态闪烁星空层 */
 #twinkling-stars {
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
-    z-index: 0;
-    pointer-events: none; /* 防止遮挡点击 */
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    z-index: 0; pointer-events: none;
 }
-
 .star {
-    position: absolute;
-    background-color: #fff;
-    border-radius: 50%;
-    /* 添加星光光晕 */
+    position: absolute; background-color: #fff; border-radius: 50%;
     box-shadow: 0 0 6px 1px rgba(255, 255, 255, 0.8);
     animation: twinkle infinite alternate ease-in-out;
 }
-
-/* 闪烁动画 */
 @keyframes twinkle {
     0% { opacity: 0.1; transform: scale(0.6); }
     100% { opacity: 1; transform: scale(1.2); }
@@ -47,64 +35,73 @@ body, html {
 
 /* 顶部标题 */
 .title-container {
-    position: absolute;
-    top: 40px; width: 100%; text-align: center;
-    z-index: 10; color: #fff;
-    letter-spacing: 6px; font-size: 18px;
-    text-shadow: 0 0 20px rgba(255,255,255,0.5);
+    position: absolute; top: 40px; width: 100%; text-align: center;
+    z-index: 10; color: #fff; letter-spacing: 6px; font-size: 18px;
+    text-shadow: 0 0 20px rgba(255,255,255,0.5); pointer-events: none;
 }
 .title-container span {
-    display: block; font-size: 10px;
-    letter-spacing: 4px; margin-top: 10px; color: #99a;
+    display: block; font-size: 10px; letter-spacing: 4px; margin-top: 10px; color: #99a;
+}
+
+/* ================= 手部指示箭头 ================= */
+#hand-cursor {
+    position: absolute;
+    width: 40px; height: 40px;
+    top: 0; left: 0;
+    pointer-events: none; /* 关键：让点击穿透箭头，直接作用于下方的窗户 */
+    z-index: 100;
+    opacity: 0; /* 默认隐藏，检测到手时显示 */
+    transition: opacity 0.3s ease, transform 0.1s ease-out;
+    /* 坐标偏移，让箭头尖端对准坐标点 */
+    margin-left: -10px; 
+    margin-top: -10px;
+    transform-origin: top left;
+}
+#hand-cursor svg {
+    width: 100%; height: 100%;
+    filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.8));
+    fill: #fff;
+    transition: all 0.2s ease;
+}
+/* 捏合状态下的箭头反馈 */
+#hand-cursor.pinching {
+    transform: scale(0.8); /* 缩小 */
+}
+#hand-cursor.pinching svg {
+    fill: #ffd166; /* 变成暖黄色 */
+    filter: drop-shadow(0 0 15px #ffd166);
 }
 
 /* ================= 建筑群容器 ================= */
 #buildings-container {
-    position: relative;
-    width: 100%; height: 75vh;
-    display: flex;
-    justify-content: center;
-    align-items: flex-end;
-    z-index: 1;
-    padding-bottom: 0;
-    gap: 3px;
+    position: relative; width: 100%; height: 75vh;
+    display: flex; justify-content: center; align-items: flex-end;
+    z-index: 1; padding-bottom: 0; gap: 3px;
 }
-
-/* 建筑群底部的接地阴影 */
 #buildings-container::after {
-    content: '';
-    position: absolute;
-    bottom: 0; left: 0; width: 100%; height: 50px;
+    content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 50px;
     background: linear-gradient(to top, #050508 0%, transparent 100%);
-    z-index: 5;
-    pointer-events: none;
+    z-index: 5; pointer-events: none;
 }
 
 /* 基础楼房样式 */
 .building {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    position: relative; display: flex; flex-direction: column; align-items: center;
     padding-top: 30px;
     box-shadow: 
         inset 4px 0 10px rgba(255,255,255,0.08),
         inset -6px 0 15px rgba(0,0,0,0.6),
         inset 0 -20px 30px rgba(0,0,0,0.5),
         2px 0 5px rgba(0,0,0,0.3);
-    overflow: hidden;
-    border-top-left-radius: 4px;
-    border-top-right-radius: 4px;
+    overflow: hidden; border-top-left-radius: 4px; border-top-right-radius: 4px;
 }
-
-/* 噪点水彩纹理 */
 .building::before {
     content: ''; position: absolute; inset: 0;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
     opacity: 0.15; mix-blend-mode: overlay; pointer-events: none;
 }
 
-/* ================= 7 栋楼的水彩渐变色 ================= */
+/* 7栋楼的渐变色 */
 .b1 { width: 12%; height: 55%; background: linear-gradient(180deg, #7b68b6 0%, #44357c 100%); }
 .b2 { width: 15%; height: 48%; background: linear-gradient(180deg, #5983a6 0%, #2d455f 100%); border-top-left-radius: 8px; border-top-right-radius: 8px; }
 .b3 { width: 11%; height: 68%; background: linear-gradient(180deg, #9f6bb8 0%, #563167 100%); }
@@ -115,47 +112,28 @@ body, html {
 
 /* 窗户容器 */
 .windows-wrapper {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-content: flex-start;
-    gap: 12px 10px; 
-    width: 95%;
-    margin-top: 15px;
-    z-index: 2;
+    display: flex; flex-wrap: wrap; justify-content: center; align-content: flex-start;
+    gap: 12px 10px; width: 95%; margin-top: 15px; z-index: 2;
 }
 
-/* ================= 立体拱形窗户 ================= */
+/* 立体拱形窗户 */
 .window {
-    width: 34px; 
-    height: 52px; 
-    background-color: #0b0c10;
+    width: 34px; height: 52px; background-color: #0b0c10;
     border-radius: 17px 17px 0 0;
-    box-shadow: 
-        inset 0 5px 12px rgba(0,0,0,0.95), 
-        inset 0 0 5px rgba(0,0,0,0.8),
-        0 1px 2px rgba(255,255,255,0.1); 
-    border: 1px solid rgba(0,0,0,0.6);
-    cursor: pointer;
-    transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
-    position: relative;
+    box-shadow: inset 0 5px 12px rgba(0,0,0,0.95), inset 0 0 5px rgba(0,0,0,0.8), 0 1px 2px rgba(255,255,255,0.1); 
+    border: 1px solid rgba(0,0,0,0.6); cursor: pointer;
+    transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1); position: relative;
 }
 
 /* 点亮状态 */
 .window.on {
     background-color: currentColor;
-    box-shadow: 
-        0 0 30px currentColor, 
-        inset 0 0 15px rgba(255,255,255,0.8),
-        inset 0 0 5px rgba(255,255,255,1);
-    border-color: rgba(255,255,255,0.4);
-    transform: scale(1.08);
+    box-shadow: 0 0 30px currentColor, inset 0 0 15px rgba(255,255,255,0.8), inset 0 0 5px rgba(255,255,255,1);
+    border-color: rgba(255,255,255,0.4); transform: scale(1.08);
 }
 
 /* 闪烁动画 */
-.blinking {
-    animation: blinkAnim 0.6s infinite alternate;
-}
+.blinking { animation: blinkAnim 0.6s infinite alternate; }
 @keyframes blinkAnim {
     0% { opacity: 0.15; filter: brightness(0.5); transform: scale(0.95); }
     100% { opacity: 1; filter: brightness(1.3); transform: scale(1.08); }
@@ -174,7 +152,7 @@ body, html {
 #gesture-hint {
     position: absolute; bottom: 30px; left: 30px;
     color: rgba(255,255,255,0.7); font-size: 13px; line-height: 2;
-    z-index: 10; text-shadow: 0 2px 4px #000;
+    z-index: 10; text-shadow: 0 2px 4px #000; pointer-events: none;
 }
 #gesture-hint b { color: #fff; font-weight: 500; }
 
