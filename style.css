@@ -62,7 +62,7 @@ body, html {
 #buildings-container {
     position: relative; width: 100%; height: 80vh; 
     display: flex; justify-content: center; align-items: flex-end;
-    z-index: 1; padding-bottom: 0; gap: 2px; /* 缩小间隙，让阴影更明显 */
+    z-index: 1; padding-bottom: 0; gap: 2px;
 }
 #buildings-container::after {
     content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 30px;
@@ -70,34 +70,30 @@ body, html {
     z-index: 5; pointer-events: none;
 }
 
-/* 基础楼房样式 (强化立体感) */
+/* 基础楼房样式 */
 .building {
     position: relative; display: flex; flex-direction: column; align-items: center;
     padding-top: 20px;
-    /* 强化边缘阴影，并加入向右的外投影 */
     box-shadow: 
-        inset 3px 0 8px rgba(255,255,255,0.08), /* 左侧内高光 */
-        inset -6px 0 15px rgba(0,0,0,0.6),     /* 右侧内阴影 */
-        inset 0 -20px 30px rgba(0,0,0,0.7),    /* 底部内阴影 */
-        8px 0 15px -5px rgba(0,0,0,0.9);       /* 向右的外投影(楼体间阴影) */
+        inset 3px 0 8px rgba(255,255,255,0.08),
+        inset -6px 0 15px rgba(0,0,0,0.6), 
+        inset 0 -20px 30px rgba(0,0,0,0.7),
+        8px 0 15px -5px rgba(0,0,0,0.9);
     overflow: hidden; 
     z-index: 2;
 }
-/* 水彩噪点纹理 */
 .building::before {
     content: ''; position: absolute; inset: 0;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
     opacity: 0.2; mix-blend-mode: overlay; pointer-events: none; z-index: 1;
 }
-
-/* 新增：墙面横向立体光影层 (左亮右暗) */
 .building::after {
     content: ''; position: absolute; inset: 0;
     background: linear-gradient(to right, rgba(255,255,255,0.12) 0%, transparent 30%, transparent 70%, rgba(0,0,0,0.5) 100%);
     z-index: 1; pointer-events: none;
 }
 
-/* ================= 7栋楼配色与高度 ================= */
+/* 7栋楼配色与高度 */
 .b1 { width: 14%; height: 55%; background: linear-gradient(180deg, #5c6b8c 0%, #2b3242 100%); }
 .b2 { width: 14%; height: 65%; background: linear-gradient(180deg, #6f5b73 0%, #362b3a 100%); }
 .b3 { width: 14%; height: 45%; background: linear-gradient(180deg, #4f6d73 0%, #243133 100%); }
@@ -106,35 +102,35 @@ body, html {
 .b6 { width: 14%; height: 75%; background: linear-gradient(180deg, #4e6b61 0%, #23312c 100%); }
 .b7 { width: 14%; height: 62%; background: linear-gradient(180deg, #8c5b4f 0%, #412924 100%); }
 
-/* ================= 黑色大门 ================= */
+/* 黑色大门 */
 .door {
     position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
-    width: 30px; height: 46px; 
-    background: #0a0a0c; border-radius: 15px 15px 0 0; 
+    width: 32px; height: 46px; 
+    background: #0a0a0c; border-radius: 16px 16px 0 0; 
     border: 1px solid rgba(255,255,255,0.05); border-bottom: none;
     box-shadow: inset 0 4px 8px rgba(0,0,0,0.9), 0 -2px 5px rgba(0,0,0,0.6);
     z-index: 3; 
 }
 
-/* ================= 窗户网格区域 ================= */
+/* 窗户网格区域 */
 .windows-wrapper {
     display: grid; 
     grid-template-columns: repeat(4, 1fr); 
     justify-items: center; align-items: center; 
     column-gap: 0px; 
-    row-gap: 16px; 
+    row-gap: 14px;
     width: 100%; 
     margin-top: 15px; 
     padding-bottom: 60px; 
     z-index: 2;
 }
 
-/* ================= 细长拱形窗户 ================= */
+/* 细长拱形窗户 */
 .window {
-    width: 22px; 
-    height: 52px; 
+    width: 28px; 
+    height: 54px; 
     background-color: #08080a; 
-    border-radius: 11px 11px 0 0; 
+    border-radius: 14px 14px 0 0; 
     box-shadow: inset 0 4px 10px rgba(0,0,0,0.95), 0 1px 2px rgba(255,255,255,0.05); 
     border: 2px solid rgba(0,0,0,0.8); 
     cursor: pointer;
@@ -158,15 +154,15 @@ body, html {
 /* 点亮状态 */
 .window.on {
     background-color: currentColor;
-    box-shadow: 0 0 15px currentColor, inset 0 0 8px rgba(255,255,255,0.8);
+    box-shadow: 0 0 15px currentColor, inset 0 0 8px rgba(255,255,255,0.7);
     border-color: #000; 
     transform: scale(1.05);
 }
 
-/* 点亮后显示黑色的十字窗格 */
+/* 点亮后显示深灰十字窗格 */
 .window.on::before, 
 .window.on::after {
-    background-color: #000;
+    background-color: #222;
 }
 
 /* 闪烁动画 */

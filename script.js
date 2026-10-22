@@ -20,7 +20,7 @@ createTwinklingStars();
 // ================= 1. 生成窗户 =================
 document.querySelectorAll('.windows-wrapper').forEach(wrapper => {
     const rows = parseInt(wrapper.dataset.rows);
-    const cols = 4; // 强制锁定每层 4 个
+    const cols = 4; 
     const totalWindows = cols * rows;
 
     for (let i = 0; i < totalWindows; i++) {
@@ -28,21 +28,22 @@ document.querySelectorAll('.windows-wrapper').forEach(wrapper => {
         win.className = 'window';
         win.dataset.state = 'off';
         win.addEventListener('click', () => toggleWindow(win));
+        
         wrapper.appendChild(win);
     }
 });
 
 // ================= 2. 交互核心逻辑 =================
-// 参考图片提取的通透荧光色
+// 🌟 饱和度稍微高一点，色彩更鲜艳、清透
 const neonColors = [
-    '#a8f0d1', // 薄荷绿
-    '#a8d8f0', // 冰蓝
-    '#f5e6a8', // 鹅黄
-    '#d8a8f0', // 淡紫
-    '#f0a8c0', // 樱花粉
-    '#c0f0a8', // 嫩绿
-    '#f0c8a8', // 暖桃
-    '#e8e8f0'  // 纯亮白
+    '#FFE066', // 亮鹅黄
+    '#66B2FF', // 亮冰蓝
+    '#66D9A1', // 亮薄荷绿
+    '#FF85C0', // 亮粉
+    '#B380FF', // 亮紫
+    '#FFA366', // 亮橙
+    '#66E0E0', // 亮青色
+    '#FFF0A8'  // 暖香槟
 ];
 
 const cursorElement = document.getElementById('hand-cursor');
