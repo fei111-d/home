@@ -1,3 +1,32 @@
+// ================= 0. 动态生成闪烁星光 =================
+function createTwinklingStars() {
+    const container = document.getElementById('twinkling-stars');
+    const starCount = 60; // 星星数量
+
+    for (let i = 0; i < starCount; i++) {
+        const star = document.createElement('div');
+        star.className = 'star';
+        
+        // 随机大小 (1px 到 3px)
+        const size = Math.random() * 2 + 1;
+        star.style.width = `${size}px`;
+        star.style.height = `${size}px`;
+        
+        // 随机位置
+        star.style.left = `${Math.random() * 100}%`;
+        star.style.top = `${Math.random() * 80}%`; // 限制在屏幕上方 80% 区域，避免和房子底部重叠太多
+        
+        // 随机动画时长和延迟，错开闪烁频率
+        const animDuration = Math.random() * 2 + 1.5; // 1.5s 到 3.5s
+        const animDelay = Math.random() * 2; 
+        star.style.animationDuration = `${animDuration}s`;
+        star.style.animationDelay = `${animDelay}s`;
+
+        container.appendChild(star);
+    }
+}
+createTwinklingStars();
+
 // ================= 1. 生成窗户 =================
 document.querySelectorAll('.windows-wrapper').forEach(wrapper => {
     const cols = parseInt(wrapper.dataset.cols);
@@ -16,8 +45,8 @@ document.querySelectorAll('.windows-wrapper').forEach(wrapper => {
 
 // ================= 2. 交互核心逻辑 =================
 const neonColors = [
-    '#ffca3a', '#ff595e', '#1982c4', 
-    '#8ac926', '#ff924c', '#e0aaff'
+    '#ffd166', '#ff6b6b', '#4dabf7', 
+    '#69db7c', '#ff922b', '#cc5de8'
 ];
 
 function toggleWindow(win) {
@@ -150,7 +179,7 @@ function turnOffAllLights() {
     });
     setTimeout(() => {
         document.querySelectorAll('.window').forEach(win => {
-            win.style.transition = 'all 0.3s ease';
+            win.style.transition = 'all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1)';
         });
     }, 2000);
 }
