@@ -1,76 +1,50 @@
-// ================= 1. 初始化建筑和窗户 =================
-const buildingsContainer = document.getElementById('buildings-container');
-const numBuildings = 7;
-const buildings = [];
+// ================= 1. 生成窗户 =================
+document.querySelectorAll('.windows-wrapper').forEach(wrapper => {
+    const cols = parseInt(wrapper.dataset.cols);
+    const rows = parseInt(wrapper.dataset.rows);
+    const totalWindows = cols * rows;
 
-function initBuildings() {
-    for (let i = 0; i < numBuildings; i++) {
-        const building = document.createElement('div');
-        building.className = 'building';
-        
-        // 随机建筑高度和宽度
-        const height = 200 + Math.random() * 200;
-        const width = 80 + Math.random() * 40;
-        building.style.height = `${height}px`;
-        building.style.width = `${width}px`;
-
-        // 生成窗户网格
-        const cols = Math.floor(width / 30);
-        const rows = Math.floor(height / 40);
-        
-        for (let r = 0; r < rows; r++) {
-            for (let c = 0; c < cols; c++) {
-                const win = document.createElement('div');
-                win.className = 'window';
-                win.dataset.state = 'off'; // 记录状态
-                
-                // 手动添加点击事件 (方便鼠标测试，虽然最终是手势交互)
-                win.addEventListener('click', () => toggleWindow(win));
-                
-                building.appendChild(win);
-            }
-        }
-        buildingsContainer.appendChild(building);
-        buildings.push(building);
+    for (let i = 0; i < totalWindows; i++) {
+        const win = document.createElement('div');
+        win.className = 'window';
+        win.dataset.state = 'off';
+        // 鼠标点击测试
+        win.addEventListener('click', () => toggleWindow(win));
+        wrapper.appendChild(win);
     }
-}
-initBuildings();
+});
 
-// ================= 2. 窗户状态逻辑 =================
-// 开关窗户
+// ================= 2. 交互核心逻辑 =================
+const neonColors = [
+    '#ffca3a', '#ff595e', '#1982c4', 
+    '#8ac926', '#ff924c', '#e0aaff'
+];
+
 function toggleWindow(win) {
     if (win.dataset.state === 'off') {
-        // 开灯
         win.dataset.state = 'on';
         win.classList.add('on');
-        // 随机颜色 (HSL色彩空间，随机色相)
-        const randomHue = Math.floor(Math.random() * 360);
-        win.style.backgroundColor = `hsl(${randomHue}, 80%, 60%)`;
-        win.style.color = `hsl(${randomHue}, 80%, 60%)`; // 用于 box-shadow
+        const randomColor = neonColors[Math.floor(Math.random() * neonColors.length)];
+        win.style.color = randomColor;
     } else {
-        // 关灯
         win.dataset.state = 'off';
         win.classList.remove('on');
-        win.style.backgroundColor = '#0f0f1a';
         win.style.color = 'transparent';
     }
 }
 
-// 获取所有已点亮的窗户
 function getLitWindows() {
     return Array.from(document.querySelectorAll('.window.on'));
 }
 
-// ================= 3. 手势识别逻辑 (MediaPipe) =================
+// ================= 3. 手势识别 =================
 const videoElement = document.querySelector('.input_video');
 
-// 状态锁，防止单次手势触发多次
 let isPinching = false;
 let isFistClosed = false;
 let isBlinking = false;
 
 function onResults(results) {
-    // 如果没有检测到手，重置状态
     if (!results.multiHandLandmarks || results.multiHandLandmarks.length === 0) {
         isPinching = false;
         return;
@@ -78,12 +52,9 @@ function onResults(results) {
 
     const hands = results.multiHandLandmarks;
 
-    // --- 手势 3: 双手握拳熄灭 ---
+    // 双手握拳：全灭
     if (hands.length === 2) {
-        const isLeftFist = checkFist(hands[0]);
-        const isRightFist = checkFist(hands[1]);
-        
-        if (isLeftFist && isRightFist) {
+        if (checkFist(hands[0]) && checkFist(hands[1])) {
             if (!isFistClosed) {
                 turnOffAllLights();
                 isFistClosed = true;
@@ -91,44 +62,39 @@ function onResults(results) {
         } else {
             isFistClosed = false;
         }
-        return; // 双手模式下不执行单手操作
+        return; 
     }
 
-    // 单手模式
+    // 单手操作
     const landmarks = hands[0];
-    const indexTip = landmarks[8]; // 食指指尖
-    const thumbTip = landmarks[4]; // 拇指指尖
+    const indexTip = landmarks[8]; 
+    const thumbTip = landmarks[4]; 
 
-    // --- 手势 2: 五指张开闪烁 ---
+    // 张开手掌：闪烁
     if (checkOpenPalm(landmarks)) {
         startBlinking();
     } else {
         stopBlinking();
     }
 
-    // --- 手势 1: 捏合 (拇指+食指) 点击窗户 ---
-    // 计算拇指和食指的距离 (使用3D坐标)
+    // 捏合：点灯
     const distance = Math.hypot(
         thumbTip.x - indexTip.x,
         thumbTip.y - indexTip.y,
         thumbTip.z - indexTip.z
     );
     
-    const pinchThreshold = 0.05; // 捏合距离阈值
+    const pinchThreshold = 0.045; 
 
     if (distance < pinchThreshold) {
         if (!isPinching) {
             isPinching = true;
             
-            // 将归一化的坐标转换为屏幕坐标
-            // 因为视频是镜像的，所以 x 需要反向处理 (1 - x)
             const screenX = (1 - indexTip.x) * window.innerWidth;
             const screenY = indexTip.y * window.innerHeight;
             
-            // 找到光标下的元素
             const element = document.elementFromPoint(screenX, screenY);
             
-            // 如果点到了窗户，触发开关
             if (element && element.classList.contains('window')) {
                 toggleWindow(element);
             }
@@ -138,43 +104,29 @@ function onResults(results) {
     }
 }
 
-// 检测是否握拳 (所有手指指尖低于第二关节)
 function checkFist(landmarks) {
-    let closedFingers = 0;
-    // 检查食指(8), 中指(12), 无名指(16), 小指(20)
-    const tips = [8, 12, 16, 20];
-    const pips = [6, 10, 14, 18];
-    
+    let closed = 0;
+    const tips = [8, 12, 16, 20], pips = [6, 10, 14, 18];
     for (let i = 0; i < 4; i++) {
-        if (landmarks[tips[i]].y > landmarks[pips[i]].y) {
-            closedFingers++;
-        }
+        if (landmarks[tips[i]].y > landmarks[pips[i]].y) closed++;
     }
-    return closedFingers === 4;
+    return closed === 4;
 }
 
-// 检测是否五指张开 (所有手指指尖高于第二关节)
 function checkOpenPalm(landmarks) {
-    let openFingers = 0;
-    const tips = [8, 12, 16, 20];
-    const pips = [6, 10, 14, 18];
-    
+    let open = 0;
+    const tips = [8, 12, 16, 20], pips = [6, 10, 14, 18];
     for (let i = 0; i < 4; i++) {
-        if (landmarks[tips[i]].y < landmarks[pips[i]].y) {
-            openFingers++;
-        }
+        if (landmarks[tips[i]].y < landmarks[pips[i]].y) open++;
     }
-    return openFingers >= 4; // 允许少量误差
+    return open >= 4;
 }
 
-// 闪烁控制
 function startBlinking() {
     if (isBlinking) return;
     isBlinking = true;
-    const litWindows = getLitWindows();
-    litWindows.forEach((win, index) => {
-        // 设置随机延迟，产生交错闪烁的效果
-        win.style.animationDelay = `${Math.random()}s`;
+    getLitWindows().forEach(win => {
+        win.style.animationDelay = `${Math.random() * 0.8}s`;
         win.classList.add('blinking');
     });
 }
@@ -182,26 +134,20 @@ function startBlinking() {
 function stopBlinking() {
     if (!isBlinking) return;
     isBlinking = false;
-    const windows = document.querySelectorAll('.window');
-    windows.forEach(win => {
+    document.querySelectorAll('.window').forEach(win => {
         win.classList.remove('blinking');
         win.style.animationDelay = '';
     });
 }
 
-// 全部熄灭
 function turnOffAllLights() {
     stopBlinking();
-    const litWindows = getLitWindows();
-    // 增加过渡效果，实现逐渐熄灭
-    litWindows.forEach(win => {
-        win.style.transition = 'all 2s ease'; // 2秒缓慢熄灭
+    getLitWindows().forEach(win => {
+        win.style.transition = 'all 2s ease'; 
         win.classList.remove('on');
-        win.style.backgroundColor = '#0f0f1a';
+        win.style.color = 'transparent';
         win.dataset.state = 'off';
     });
-    
-    // 2秒后恢复正常过渡时间
     setTimeout(() => {
         document.querySelectorAll('.window').forEach(win => {
             win.style.transition = 'all 0.3s ease';
@@ -209,30 +155,25 @@ function turnOffAllLights() {
     }, 2000);
 }
 
-// ================= 4. 启动 MediaPipe 摄像头 =================
+// ================= 4. 初始化 MediaPipe =================
 const hands = new Hands({locateFile: (file) => {
     return `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`;
 }});
 
 hands.setOptions({
-    maxNumHands: 2, // 需要识别双手
+    maxNumHands: 2,
     modelComplexity: 1,
-    minDetectionConfidence: 0.7,
-    minTrackingConfidence: 0.7
+    minDetectionConfidence: 0.6,
+    minTrackingConfidence: 0.6
 });
 
 hands.onResults(onResults);
 
 const camera = new Camera(videoElement, {
-    onFrame: async () => {
-        await hands.send({image: videoElement});
-    },
-    width: 640,
-    height: 480
+    onFrame: async () => { await hands.send({image: videoElement}); },
+    width: 640, height: 480
 });
 
-// 启动摄像头
 camera.start().catch(error => {
-    console.error("摄像头启动失败，请确保在 HTTPS 或 localhost 下运行", error);
-    alert("无法访问摄像头，请确保在 HTTPS 或 localhost 环境运行！");
+    console.error("请确保在 HTTPS 或 localhost 环境下运行", error);
 });

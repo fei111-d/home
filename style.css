@@ -1,135 +1,171 @@
 body, html {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 100%;
+    margin: 0; padding: 0; width: 100%; height: 100%;
     overflow: hidden;
-    background-color: #0a0a10; /* 夜空背景 */
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #030308;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
 }
 
-/* 星空背景 */
+/* 动态星空背景 */
 #stars {
     position: absolute;
-    width: 100%;
-    height: 100%;
-    background-image: radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 40px),
-                      radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 30px),
-                      radial-gradient(white, rgba(255,255,255,.1) 2px, transparent 40px);
-    background-size: 550px 550px, 350px 350px, 250px 250px;
-    background-position: 0 0, 40px 60px, 130px 270px;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background-image: 
+        radial-gradient(1.5px 1.5px at 15% 25%, rgba(255,255,255,0.8), transparent),
+        radial-gradient(2px 2px at 40% 60%, rgba(255,255,255,0.6), transparent),
+        radial-gradient(1px 1px at 65% 15%, rgba(255,255,255,0.5), transparent),
+        radial-gradient(1.5px 1.5px at 85% 70%, rgba(255,255,255,0.7), transparent);
+    background-size: 300px 300px;
     z-index: 0;
 }
 
-/* 标题 */
+/* 顶部标题 */
 .title-container {
     position: absolute;
-    top: 20px;
-    width: 100%;
-    text-align: center;
-    z-index: 10;
-    color: #fff;
-    letter-spacing: 5px;
-    font-size: 12px;
-    opacity: 0.8;
+    top: 40px; width: 100%; text-align: center;
+    z-index: 10; color: #fff;
+    letter-spacing: 6px; font-size: 18px;
+    text-shadow: 0 0 15px rgba(255,255,255,0.4);
+}
+.title-container span {
+    display: block; font-size: 10px;
+    letter-spacing: 4px; margin-top: 10px; color: #889;
 }
 
-/* 建筑群容器 */
+/* ================= 建筑群容器 ================= */
 #buildings-container {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    height: 60vh;
+    position: relative;
+    width: 100%; height: 75vh;
     display: flex;
     justify-content: center;
     align-items: flex-end;
-    gap: 5px;
     z-index: 1;
+    padding-bottom: 10px;
+    gap: 2px; /* 楼与楼之间的缝隙 */
 }
 
-/* 单栋建筑 */
+/* 基础楼房样式 */
 .building {
-    background: linear-gradient(to bottom, #2b1b4d, #1a1a3a);
-    border-radius: 5px 5px 0 0;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 30px;
+    box-shadow: inset 0 0 40px rgba(0,0,0,0.9);
+    overflow: hidden;
+}
+
+/* 噪点滤镜 */
+.building::before {
+    content: ''; position: absolute; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    opacity: 0.2; mix-blend-mode: overlay; pointer-events: none;
+}
+
+/* ================= 7 栋楼的独立设计 ================= */
+/* 楼 1：尖顶，紫蓝色 */
+.b1 { 
+    width: 12%; height: 55%; 
+    background: linear-gradient(180deg, #3a2c75, #151030);
+    clip-path: polygon(20% 0, 80% 0, 100% 10%, 100% 100%, 0 100%, 0 10%);
+}
+/* 楼 2：宽扁，亮蓝色 */
+.b2 { 
+    width: 16%; height: 45%; 
+    background: linear-gradient(180deg, #2f5c8f, #0d1a2e);
+    border-top-left-radius: 10px; border-top-right-radius: 10px;
+}
+/* 楼 3：阶梯顶，深紫色 */
+.b3 { 
+    width: 11%; height: 70%; 
+    background: linear-gradient(180deg, #5b3594, #23113b);
+    clip-path: polygon(20% 0, 80% 0, 100% 15%, 100% 100%, 0 100%, 0 15%);
+}
+/* 楼 4：最高，窄，带点洋红 */
+.b4 { 
+    width: 10%; height: 85%; 
+    background: linear-gradient(180deg, #8b2d5f, #2a091b);
+    border-top-left-radius: 50% 20px; border-top-right-radius: 50% 20px;
+}
+/* 楼 5：中等，水粉色 */
+.b5 { 
+    width: 15%; height: 60%; 
+    background: linear-gradient(180deg, #c27880, #3c191f);
+}
+/* 楼 6：斜顶，蓝绿色 */
+.b6 { 
+    width: 13%; height: 50%; 
+    background: linear-gradient(180deg, #286d72, #0a2022);
+    clip-path: polygon(0 15%, 100% 0, 100% 100%, 0 100%);
+}
+/* 楼 7：中等，暖橙色 */
+.b7 { 
+    width: 14%; height: 65%; 
+    background: linear-gradient(180deg, #b35432, #36120a);
+    border-top-left-radius: 15px; border-top-right-radius: 15px;
+}
+
+/* 窗户容器 */
+.windows-wrapper {
     display: flex;
     flex-wrap: wrap;
-    padding: 20px 10px;
-    gap: 10px;
     justify-content: center;
     align-content: flex-start;
-    box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+    gap: 10px 8px; /* 间隙微调以适应变大的窗户 */
+    width: 95%;
+    margin-top: 15px;
+    z-index: 2;
+}
+
+/* ================= 拱形窗户 (尺寸已调大) ================= */
+.window {
+    width: 32px; /* 从 28px 放大到 32px */
+    height: 50px; /* 从 45px 放大到 50px */
+    background-color: #030305;
+    border-radius: 16px 16px 2px 2px;
+    border: 1px solid rgba(255,255,255,0.05);
+    box-shadow: inset 0 4px 8px rgba(0,0,0,0.9);
+    cursor: pointer;
+    transition: all 0.3s ease;
     position: relative;
 }
 
-/* 窗户样式 */
-.window {
-    width: 20px;
-    height: 30px;
-    background-color: #0f0f1a;
-    border-radius: 3px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    border: 1px solid #222;
-}
-
-/* 窗户点亮状态 */
+/* 点亮状态 */
 .window.on {
-    /* 颜色由 JS 动态注入 */
-    box-shadow: 0 0 15px currentColor, inset 0 0 10px currentColor;
-    border-color: transparent;
+    background-color: currentColor;
+    box-shadow: 
+        0 0 25px currentColor, 
+        inset 0 0 12px rgba(255,255,255,0.6);
+    border-color: rgba(255,255,255,0.3);
+    transform: scale(1.05);
 }
 
-/* 闪烁动画类 */
+/* 闪烁动画 */
 .blinking {
-    animation: blink 0.5s infinite alternate;
+    animation: blinkAnim 0.6s infinite alternate;
+}
+@keyframes blinkAnim {
+    0% { opacity: 0.1; filter: brightness(0.5); transform: scale(0.95); }
+    100% { opacity: 1; filter: brightness(1.2); transform: scale(1.05); }
 }
 
-@keyframes blink {
-    from { opacity: 0.3; }
-    to { opacity: 1; }
-}
-
-/* 摄像头小窗 (画中画风格) */
+/* ================= UI 区域 ================= */
 #video-container {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    width: 200px;
-    height: 150px;
-    border-radius: 10px;
-    overflow: hidden;
+    position: absolute; top: 20px; right: 20px;
+    width: 220px; height: 160px;
+    border-radius: 12px; overflow: hidden;
     border: 2px solid rgba(255,255,255,0.2);
-    z-index: 10;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-    background-color: #000;
+    z-index: 10; box-shadow: 0 10px 30px rgba(0,0,0,0.8);
 }
+.input_video { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); }
 
-.input_video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transform: scaleX(-1); /* 镜像翻转 */
-}
-
-/* UI 提示 */
 #gesture-hint {
-    position: absolute;
-    bottom: 20px;
-    left: 20px;
-    color: rgba(255,255,255,0.6);
-    font-size: 14px;
-    line-height: 1.6;
-    z-index: 10;
-    background: rgba(0,0,0,0.5);
-    padding: 15px;
-    border-radius: 8px;
-    pointer-events: none;
+    position: absolute; bottom: 30px; left: 30px;
+    color: rgba(255,255,255,0.6); font-size: 13px; line-height: 2;
+    z-index: 10; text-shadow: 0 2px 4px #000;
 }
+#gesture-hint b { color: #fff; font-weight: 500; }
 
-#gesture-hint p { margin: 5px 0; }
-.highlight { color: #fff; font-weight: bold; }
-
-/* 隐藏辅助Canvas */
-.output_canvas {
-    display: none;
-}
+.output_canvas { display: none; }

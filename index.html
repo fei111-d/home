@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lumos Maxima - 手势交互万家灯火</title>
+    <title>Lumos Maxima - 万家灯火 (高密度优化版)</title>
     
-    <!-- 引入外部 CSS -->
+    <!-- 引入外部 CSS 文件 -->
     <link rel="stylesheet" href="style.css">
     
     <!-- 引入 MediaPipe Hands -->
@@ -16,36 +16,40 @@
 </head>
 <body>
 
-    <!-- 星空背景 -->
+    <!-- 动态星空背景 -->
     <div id="stars"></div>
 
     <!-- 顶部标题 -->
     <div class="title-container">
-        <div>L U M O S &nbsp;&nbsp; M A X I M A</div>
-        <div style="font-size: 10px; opacity: 0.5; margin-top: 5px;">TO WINDOWS AWAKE</div>
+        LUMOS MAXIMA
+        <span>TO WINDOWS AWAKE</span>
     </div>
 
-    <!-- 建筑群容器 -->
+    <!-- 建筑群 -->
     <div id="buildings-container">
-        <!-- 建筑将通过 JS 动态生成 -->
+        <div class="building b1"><div class="windows-wrapper" data-cols="3" data-rows="5"></div></div>
+        <div class="building b2"><div class="windows-wrapper" data-cols="4" data-rows="3"></div></div>
+        <div class="building b3"><div class="windows-wrapper" data-cols="3" data-rows="7"></div></div>
+        <div class="building b4"><div class="windows-wrapper" data-cols="3" data-rows="9"></div></div>
+        <div class="building b5"><div class="windows-wrapper" data-cols="4" data-rows="5"></div></div>
+        <div class="building b6"><div class="windows-wrapper" data-cols="3" data-rows="5"></div></div>
+        <div class="building b7"><div class="windows-wrapper" data-cols="4" data-rows="6"></div></div>
     </div>
 
     <!-- 摄像头小窗 -->
     <div id="video-container">
         <video class="input_video"></video>
     </div>
-    
-    <!-- 隐藏辅助Canvas -->
     <canvas class="output_canvas"></canvas>
 
     <!-- 操作提示 -->
     <div id="gesture-hint">
-        <p>👌 <span class="highlight">在窗户位置捏合拇指与食指</span>: 开灯/关灯 (随机颜色)</p>
-        <p>🖐️ <span class="highlight">单手五指张开</span>: 已点亮的窗户交错闪烁</p>
-        <p>👊👊 <span class="highlight">双手握拳</span>: 所有灯光逐渐熄灭</p>
+        👌 <b>捏合食指与拇指</b>：点亮/熄灭窗口<br>
+        🖐️ <b>单手张开</b>：点亮交错闪烁<br>
+        ✊✊ <b>双手握拳</b>：所有灯光缓缓熄灭
     </div>
 
-    <!-- 引入外部 JS -->
+    <!-- 引入外部 JS 文件 -->
     <script src="script.js"></script>
 </body>
 </html>
