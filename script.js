@@ -1,14 +1,14 @@
 // ================= 0. 动态生成闪烁星光 =================
 function createTwinklingStars() {
     const container = document.getElementById('twinkling-stars');
-    for (let i = 0; i < 50; i++) {
+    for (let i = 0; i < 60; i++) {
         const star = document.createElement('div');
         star.className = 'star';
         const size = Math.random() * 2 + 1;
         star.style.width = `${size}px`;
         star.style.height = `${size}px`;
         star.style.left = `${Math.random() * 100}%`;
-        star.style.top = `${Math.random() * 50}%`;
+        star.style.top = `${Math.random() * 50}%`; 
         const animDuration = Math.random() * 2 + 1.5;
         star.style.animationDuration = `${animDuration}s`;
         star.style.animationDelay = `${Math.random() * 2}s`;
@@ -33,8 +33,18 @@ document.querySelectorAll('.windows-wrapper').forEach(wrapper => {
 });
 
 // ================= 2. 交互核心逻辑 =================
-// 柔和的万家灯火颜色 (暖黄、香槟、淡橙、柔白)
-const neonColors = ['#ffe8a1', '#ffd182', '#f7b267', '#f4d35e', '#ee964b', '#fff3e0'];
+// 参考图片提取的通透荧光色
+const neonColors = [
+    '#a8f0d1', // 薄荷绿
+    '#a8d8f0', // 冰蓝
+    '#f5e6a8', // 鹅黄
+    '#d8a8f0', // 淡紫
+    '#f0a8c0', // 樱花粉
+    '#c0f0a8', // 嫩绿
+    '#f0c8a8', // 暖桃
+    '#e8e8f0'  // 纯亮白
+];
+
 const cursorElement = document.getElementById('hand-cursor');
 
 function toggleWindow(win) {
@@ -73,7 +83,6 @@ function onResults(results) {
     const indexTip = landmarks[8]; 
     const thumbTip = landmarks[4]; 
 
-    // 映射屏幕坐标并更新箭头位置
     const screenX = (1 - indexTip.x) * window.innerWidth;
     const screenY = indexTip.y * window.innerHeight;
     
@@ -81,7 +90,6 @@ function onResults(results) {
     cursorElement.style.left = `${screenX}px`;
     cursorElement.style.top = `${screenY}px`;
 
-    // 双手握拳：全灭
     if (hands.length === 2) {
         if (checkFist(hands[0]) && checkFist(hands[1])) {
             if (!isFistClosed) {
@@ -94,14 +102,12 @@ function onResults(results) {
         return; 
     }
 
-    // 张开手掌：闪烁
     if (checkOpenPalm(landmarks)) {
         startBlinking();
     } else {
         stopBlinking();
     }
 
-    // 捏合：点灯
     const distance = Math.hypot(
         thumbTip.x - indexTip.x,
         thumbTip.y - indexTip.y,
