@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lumos Maxima - 万家灯火 (光标追踪版)</title>
+    <title>Lumos Maxima - 万家灯火 (和谐水彩版)</title>
     
     <!-- 引入外部 CSS 文件 -->
     <link rel="stylesheet" href="style.css">
@@ -24,23 +24,43 @@
         <span>TO WINDOWS AWAKE</span>
     </div>
 
-    <!-- 跟随手部的发光箭头光标 -->
+    <!-- 手部指示箭头 -->
     <div id="hand-cursor">
         <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <!-- 一个标准鼠标指针形状，尖端在左上角 (0,0) -->
             <path d="M4 2L20 11.5L12.5 13.5L16.5 21L13.5 22.5L9.5 15L4 20.5V2Z" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"/>
         </svg>
     </div>
 
     <!-- 建筑群 -->
     <div id="buildings-container">
-        <div class="building b1"><div class="windows-wrapper" data-cols="3" data-rows="5"></div></div>
-        <div class="building b2"><div class="windows-wrapper" data-cols="4" data-rows="3"></div></div>
-        <div class="building b3"><div class="windows-wrapper" data-cols="3" data-rows="7"></div></div>
-        <div class="building b4"><div class="windows-wrapper" data-cols="3" data-rows="9"></div></div>
-        <div class="building b5"><div class="windows-wrapper" data-cols="4" data-rows="5"></div></div>
-        <div class="building b6"><div class="windows-wrapper" data-cols="3" data-rows="5"></div></div>
-        <div class="building b7"><div class="windows-wrapper" data-cols="4" data-rows="6"></div></div>
+        <div class="building b1">
+            <div class="windows-wrapper" data-rows="6"></div>
+            <div class="door"></div>
+        </div>
+        <div class="building b2">
+            <div class="windows-wrapper" data-rows="8"></div>
+            <div class="door"></div>
+        </div>
+        <div class="building b3">
+            <div class="windows-wrapper" data-rows="5"></div>
+            <div class="door"></div>
+        </div>
+        <div class="building b4">
+            <div class="windows-wrapper" data-rows="10"></div>
+            <div class="door"></div>
+        </div>
+        <div class="building b5">
+            <div class="windows-wrapper" data-rows="7"></div>
+            <div class="door"></div>
+        </div>
+        <div class="building b6">
+            <div class="windows-wrapper" data-rows="9"></div>
+            <div class="door"></div>
+        </div>
+        <div class="building b7">
+            <div class="windows-wrapper" data-rows="8"></div>
+            <div class="door"></div>
+        </div>
     </div>
 
     <!-- 摄像头小窗 -->
@@ -49,7 +69,7 @@
     </div>
     <canvas class="output_canvas"></canvas>
 
-    <!-- 提示 -->
+    <!-- 操作提示 -->
     <div id="gesture-hint">
         👌 <b>捏合食指与拇指</b>：点亮/熄灭窗口<br>
         🖐️ <b>单手张开</b>：点亮交错闪烁<br>
