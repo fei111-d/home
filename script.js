@@ -34,7 +34,7 @@ document.querySelectorAll('.windows-wrapper').forEach(wrapper => {
 });
 
 // ================= 2. 交互核心逻辑 =================
-// 🌟 饱和度稍微高一点，色彩更鲜艳、清透
+// 饱和度高一点的颜色
 const neonColors = [
     '#FFE066', // 亮鹅黄
     '#66B2FF', // 亮冰蓝

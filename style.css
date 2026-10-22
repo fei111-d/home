@@ -165,11 +165,11 @@ body, html {
     background-color: #222;
 }
 
-/* 闪烁动画 */
-.blinking { animation: blinkAnim 0.6s infinite alternate; }
+/* 🌟 核心修改：呼吸变暗动画 (去除透明，改亮度) */
+.blinking { animation: blinkAnim 0.8s infinite alternate ease-in-out; }
 @keyframes blinkAnim {
-    0% { opacity: 0.2; filter: brightness(0.6); transform: scale(0.95); }
-    100% { opacity: 1; filter: brightness(1.1); transform: scale(1.05); }
+    0% { filter: brightness(0.2); transform: scale(0.98); }  /* 变得很暗 */
+    100% { filter: brightness(1.2); transform: scale(1.05); } /* 恢复明亮 */
 }
 
 /* ================= UI 区域 ================= */
