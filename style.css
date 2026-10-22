@@ -32,14 +32,7 @@ body, html {
     100% { opacity: 1; transform: scale(1.1); }
 }
 
-.title-container {
-    position: absolute; top: 40px; width: 100%; text-align: center;
-    z-index: 10; color: #e0e0e0; letter-spacing: 6px; font-size: 18px;
-    text-shadow: 0 0 15px rgba(255,255,255,0.3); pointer-events: none;
-}
-.title-container span {
-    display: block; font-size: 10px; letter-spacing: 4px; margin-top: 10px; color: #888;
-}
+/* 移除了 title-container 的相关样式 */
 
 /* 手部指示箭头 */
 #hand-cursor {
@@ -165,11 +158,11 @@ body, html {
     background-color: #222;
 }
 
-/* 🌟 核心修改：呼吸变暗动画 (去除透明，改亮度) */
+/* 呼吸变暗动画 (去除透明，改亮度) */
 .blinking { animation: blinkAnim 0.8s infinite alternate ease-in-out; }
 @keyframes blinkAnim {
-    0% { filter: brightness(0.2); transform: scale(0.98); }  /* 变得很暗 */
-    100% { filter: brightness(1.2); transform: scale(1.05); } /* 恢复明亮 */
+    0% { filter: brightness(0.2); transform: scale(0.98); }  
+    100% { filter: brightness(1.2); transform: scale(1.05); } 
 }
 
 /* ================= UI 区域 ================= */
